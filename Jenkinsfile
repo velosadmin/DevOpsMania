@@ -1,34 +1,21 @@
 pipeline {
-    agent any
-    
-    tools {
-        maven 'local_maven'
-    }
-    parameters {
-         string(name: 'staging_server', defaultValue: '13.232.37.20', description: 'Remote Staging Server')
-    }
 
-stages{
-        stage('Build'){
-            steps {
-                sh 'mvn clean package'
-            }
-            post {
-                success {
-                    echo 'Archiving the artifacts'
-                    archiveArtifacts artifacts: '**/target/*.war'
-                }
-            }
-        }
-
-        stage ('Deployments'){
-            parallel{
-                stage ("Deploy to Staging"){
-                    steps {
-                        sh "scp -v -o StrictHostKeyChecking=no **/*.war root@${params.staging_server}:/opt/tomcat/webapps/"
-                    }
-                }
-            }
-        }
+  agent any
+  
+  stages{
+    stage ('Build'){
+      steps{
+        echo "Builing the project"
+        sh 'ajbfagfiaf'
+    }
+  }
+  }
+    post{
+      success{
+        emailext attachLog: true, body: 'Email sent out from Jenkins', subject: '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!', to: 'rs.ranjitswain@gmail.com'
+      }
+      failure{
+        emailext attachLog: true, body: 'Email sent out from Jenkins', subject: '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!', to: 'rs.ranjitswain@gmail.com'
+      }
     }
 }
